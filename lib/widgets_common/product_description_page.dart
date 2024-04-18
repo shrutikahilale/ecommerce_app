@@ -205,14 +205,18 @@ class _ProductDescriptionPageState extends State<ProductDescriptionPage> {
                                   ),
                                   onPressed: () {
                                     if (controller.text.isNotEmpty) {
-                                      // Add order to the user's order list
-                                      userController.addOrder(OrderModal(
-                                        productName: product.name.toString(),
-                                        price: product.price.toString(),
-                                        billingAddress: controller.text.trim(),
-                                        rating: product.review.toString(),
-                                        state: 'ordered',
-                                      ));
+                                      // Add order to the user's order list                                      
+                                      userController.addOrder(
+                                        OrderModal(
+                                          productName: product.name.toString(),
+                                          price: product.price.toString(),
+                                          billingAddress:
+                                              controller.text.trim(),
+                                          rating: product.review.toString(),
+                                          state: 'ordered',
+                                        ),
+                                        product.docId.toString(),
+                                      );
 
                                       Get.offAndToNamed('/my_orders');
                                       Get.snackbar(

@@ -61,10 +61,10 @@ class UserController extends GetxController {
     }
   }
 
-  addOrder(OrderModal order) async {
+  addOrder(OrderModal order, String productId) async {
     try {
       userOrders.add(order);
-      currentUser.update({
+      await currentUser.update({
         "orders": FieldValue.arrayUnion([
           {
             'productName': order.productName,
@@ -75,7 +75,12 @@ class UserController extends GetxController {
           }
         ])
       });
+      DocumentReference<Object> product =
+          FirebaseFirestore.instance.collection('products').doc(productId);
+      // Increment the 'order' field by 1
+      await product.update({'order': FieldValue.increment(1)});
     } catch (e) {
+      print(e.toString());
       Get.snackbar('Error', e.toString(), colorText: Colors.red);
     }
   }
