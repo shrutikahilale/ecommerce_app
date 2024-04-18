@@ -30,7 +30,6 @@ class _SignupScreenState extends State<SignupScreen> {
   String _name = '';
   String _email = '';
   String _password = '';
-  String _reTypePassword = '';
 
   String? _validateEmail(String? value) {
     if (GetUtils.isEmail(value!)) {
@@ -41,7 +40,7 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   String? _validatePassword(String? value) {
-    if (value!.length < 8 || value!.length > 12) {
+    if (value!.length < 8 || value.length > 12) {
       return 'Password must be between 8 and 12 characters';
     } else if (!GetUtils.hasMatch(value, r'[a-zA-Z]') ||
         !GetUtils.hasMatch(value, r'[0-9]')) {
@@ -64,7 +63,7 @@ class _SignupScreenState extends State<SignupScreen> {
     }
 
     // Check if the name contains at least one word
-    if (value.split(' ').length < 1) {
+    if (value.split(' ').isEmpty) {
       return 'Name must contain at least one word';
     }
 
@@ -134,7 +133,7 @@ class _SignupScreenState extends State<SignupScreen> {
       };
       await users.doc(_email.trim()).set(userFields);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text(
               'Account created successfully. Re-directing to Login Screen'),
           backgroundColor: Colors.greenAccent,
@@ -203,9 +202,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         title: retypePassword,
                         controller: _reTypePasswordController,
                         onChanged: (reTypePassword) {
-                          setState(() {
-                            _reTypePassword = reTypePassword;
-                          });
+                          setState(() {});
                         },
                         validator: _validatePassword),
                     Align(
@@ -227,7 +224,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         10.widthBox,
                         Expanded(
                           child: RichText(
-                              text: TextSpan(
+                              text: const TextSpan(
                             children: [
                               TextSpan(
                                   text: "I agree to the ",
@@ -263,7 +260,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     //wrapping into gesture detector of velocity X
 
                     RichText(
-                      text: TextSpan(
+                      text: const TextSpan(
                         children: [
                           TextSpan(
                               text: alreadyHaveAccount,

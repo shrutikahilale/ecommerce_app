@@ -1,6 +1,5 @@
 import 'package:ecommerce_app/consts/consts.dart';
 import 'package:ecommerce_app/controllers/home_controller.dart';
-import 'package:ecommerce_app/views/cart_screen/cart_screen.dart';
 import 'package:ecommerce_app/views/category_screen/category_screen.dart';
 import 'package:ecommerce_app/views/home_screen/home_screen.dart';
 import 'package:ecommerce_app/views/profile_screen/profile_screen.dart';
@@ -26,7 +25,7 @@ class Home extends StatelessWidget {
     ];
 
     var navBody = [
-      const HomeScreen(),
+      HomeScreen(),
       const CategoryScreen(),
       // const CartScreen(),
       const ProfileScreen()

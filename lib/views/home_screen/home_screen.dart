@@ -4,14 +4,16 @@ import 'package:ecommerce_app/controllers/home_controller.dart';
 import 'package:ecommerce_app/views/category_screen/topSeller_screen.dart';
 import 'package:ecommerce_app/widgets_common/home_buttons.dart';
 import 'package:ecommerce_app/widgets_common/dropdown.dart';
-import 'package:ecommerce_app/widgets_common/multi_select_dropdown.dart';
 import 'package:ecommerce_app/widgets_common/product_card.dart';
 import 'package:ecommerce_app/widgets_common/product_description_page.dart';
 import 'package:ecommerce_app/views/category_screen/flashSale_screen.dart';
 import 'package:get/get.dart';
+import 'package:multi_dropdown/multiselect_dropdown.dart' as MS;
+import 'package:multi_dropdown/multiselect_dropdown.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  HomeScreen({super.key});
+  final MultiSelectController<String> _controller = MultiSelectController();
 
   @override
   Widget build(BuildContext context) {
@@ -316,32 +318,42 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ),
                         Flexible(
-                          child: MultiSelectDropDown(
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.red),
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            label: 'Select Brand',
-                            items: const [
-                              'Catwalk',
-                              'ADIDAS',
-                              'Nike',
-                              'Puma',
-                              'Rocia',
-                              'Lotto',
-                              'Fila',
-                              'Carlton',
-                              'HM',
-                              'RedTape',
-                              'Reebok',
-                              'Lee'
-                            ],
-                            onSelectionChanged: (selectedItems) {
-                              selectedBrands = selectedItems.cast<String>();
+                          child: MS.MultiSelectDropDown<String>(
+                            hint: 'Brands',
+                            hintFontSize: 12,
+                            clearIcon: const Icon(Icons.close),
+                            controller: _controller,
+                            onOptionSelected: (options) {
+                              selectedBrands =
+                                  options.map((item) => item.label).toList();
                               ctrl.sortFilterProducts(
                                   sortOption, selectedBrands);
                             },
+                            options: const <ValueItem<String>>[
+                              ValueItem(label: 'Catwalk', value: '1'),
+                              ValueItem(label: 'ADIDAS', value: '2'),
+                              ValueItem(label: 'Nike', value: '3'),
+                              ValueItem(label: 'Puma', value: '4'),
+                              ValueItem(label: 'Rocia', value: '5'),
+                              ValueItem(label: 'Lotto', value: '6'),
+                              ValueItem(label: 'Fila', value: '7'),
+                              ValueItem(label: 'Carlton', value: '8'),
+                              ValueItem(label: 'HM', value: '9'),
+                              ValueItem(label: 'RedTape', value: '10'),
+                              ValueItem(label: 'Reebok', value: '11'),
+                              ValueItem(label: 'Lee', value: '12'),
+                            ],
+                            chipConfig: const ChipConfig(
+                              backgroundColor: Colors.deepOrangeAccent,
+                            ),
+                            selectionType: SelectionType.multi,
+                            dropdownHeight: 300,
+                            optionTextStyle: const TextStyle(fontSize: 12),
+                            selectedOptionIcon: const Icon(
+                              Icons.check_circle,
+                              color: Colors.deepOrange,
+                              size: 18.0,
+                            ),
                           ),
                         )
                       ],

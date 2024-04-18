@@ -19,7 +19,8 @@ Product _$ProductFromJson(Map<String, dynamic> json, String docID) => Product(
     review: (json['review'] as num?)?.toDouble(),
     gender: json['gender'] as String?,
     numOfferPercent: (json['numOfferPercent'] as num?)?.toDouble(),
-    docId: docID);
+    docId: docID,
+    order: (json['order'] as num?)?.toDouble(),);
 
 Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
       'id': instance.id,
@@ -34,4 +35,5 @@ Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
       'review': instance.review,
       'numOfferPercent': instance.numOfferPercent,
       'gender': instance.gender,
+      'order': instance.order,
     };
