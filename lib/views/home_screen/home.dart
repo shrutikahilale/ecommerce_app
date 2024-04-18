@@ -25,7 +25,7 @@ class Home extends StatelessWidget {
     ];
 
     var navBody = [
-      const HomeScreen(),
+      HomeScreen(),
       const CategoryScreen(),
       // const CartScreen(),
       const ProfileScreen()
