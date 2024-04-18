@@ -1,7 +1,6 @@
 import 'package:ecommerce_app/consts/consts.dart';
 import 'package:ecommerce_app/consts/lists.dart';
 import 'package:ecommerce_app/views/auth_screen/signup_screen.dart';
-import 'package:ecommerce_app/views/home_screen/home.dart';
 import 'package:ecommerce_app/widgets_common/applogo_widget.dart';
 import 'package:ecommerce_app/widgets_common/bg_widget.dart';
 import 'package:ecommerce_app/widgets_common/custom_textfield.dart';
@@ -13,6 +12,7 @@ class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _LoginScreenState createState() => _LoginScreenState();
 }
 
@@ -42,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   String? _validatePassword(String? value) {
-    if (value!.length < 8 || value!.length > 12) {
+    if (value!.length < 8 || value.length > 12) {
       return 'Password must be between 8 and 12 characters';
     } else if (!GetUtils.hasMatch(value, r'[a-zA-Z]') ||
         !GetUtils.hasMatch(value, r'[0-9]')) {
@@ -61,14 +61,14 @@ class _LoginScreenState extends State<LoginScreen> {
       if (errorCode == 'invalid-email') {
         // handle
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('Please re-check the email id entered'),
             backgroundColor: Colors.red,
           ),
         );
       } else if (errorCode == 'invalid-credential') {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('Please re-check the email/password entered'),
             backgroundColor: Colors.red,
           ),

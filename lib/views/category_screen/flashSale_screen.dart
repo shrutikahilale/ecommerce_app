@@ -52,7 +52,7 @@ class FlashSaleScreen extends StatelessWidget {
                               } else if (selected == 'Rating') {
                                 sortOption = 'rating_desc';
                               }
-                              ctrl.sortFilterByGender(
+                              ctrl.sortFilterByGenderFlashSale(
                                   sortOption, selectedGender);
                             },
                             decoration: dropDownDecoration,
@@ -68,7 +68,7 @@ class FlashSaleScreen extends StatelessWidget {
                             items: const ['Women', 'Men'],
                             onSelectionChanged: (selectedItems) {
                               selectedGender = selectedItems.cast<String>();
-                              ctrl.sortFilterByGender(
+                              ctrl.sortFilterByGenderFlashSale(
                                   sortOption, selectedGender);
                             },
                           ),

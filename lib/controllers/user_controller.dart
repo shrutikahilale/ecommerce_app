@@ -1,6 +1,3 @@
-import 'dart:ffi';
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app/model/order/order.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -38,13 +35,11 @@ class UserController extends GetxController {
       }
     } catch (e) {
       Get.snackbar('Error', e.toString(), colorText: Colors.red);
-      print(e);
     }
     return null; // Return null if user doesn't exist or error occurs
   }
 
   getOrders() async {
-    print('inside get orders()');
     try {
       var snapshot = await currentUser.get();
       if (snapshot.exists) {
@@ -62,7 +57,6 @@ class UserController extends GetxController {
         }
       }
     } catch (e) {
-      print(e.toString());
       Get.snackbar('Error', e.toString(), colorText: Colors.red);
     }
   }
@@ -82,13 +76,11 @@ class UserController extends GetxController {
         ])
       });
     } catch (e) {
-      print(e.toString());
       Get.snackbar('Error', e.toString(), colorText: Colors.red);
     }
   }
 
   getWishlist() async {
-    print('inside get wishlist');
     try {
       var snapshot = await currentUser.get();
       if (snapshot.exists) {
@@ -114,14 +106,14 @@ class UserController extends GetxController {
                 price: (product['price'] as num?)?.toDouble(),
                 brand: product['brand'],
                 review: (product['review'] as num?)?.toDouble(),
-                numOfferPercent: (product['numOfferPercent'] as num?)?.toDouble(),
+                numOfferPercent:
+                    (product['numOfferPercent'] as num?)?.toDouble(),
                 docId: product.id // doc id
                 );
           }).toList();
         }
       }
     } catch (e) {
-      print(e.toString());
       Get.snackbar('Error hello', e.toString(), colorText: Colors.red);
     }
   }
@@ -148,17 +140,15 @@ class UserController extends GetxController {
             offerPercent: product['offerPercent'],
             price: (product['price'] as num?)?.toDouble(),
             brand: product['brand'],
-            review:(product['review'] as num?)?.toDouble(),
+            review: (product['review'] as num?)?.toDouble(),
             numOfferPercent: (product['numOfferPercent'] as num?)?.toDouble(),
             docId: snapshot.id // doc id
             ));
-        print('addToWishlist() userProductWishlist $userProductWishlist');
         await currentUser.update({
           "wishlist": FieldValue.arrayUnion([productId])
         });
       }
     } catch (e) {
-      print(e.toString());
       Get.snackbar('Error', e.toString(), colorText: Colors.red);
     }
   }
@@ -170,13 +160,11 @@ class UserController extends GetxController {
         "wishlist": FieldValue.arrayRemove([productId])
       });
     } catch (e) {
-      print(e.toString());
       Get.snackbar('Error', e.toString(), colorText: Colors.red);
     }
   }
 
   bool isProductAddedToWishlist(String productId) {
-    print('isProductAddedToWishlist userProductWishlist $userProductWishlist');
     return userProductWishlist
             .indexWhere((product) => product.docId == productId) !=
         -1;

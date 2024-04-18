@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import '../model/product/product.dart';
 
 class ProductDescriptionPage extends StatefulWidget {
-  const ProductDescriptionPage({Key? key});
+  const ProductDescriptionPage({super.key});
 
   @override
   State<ProductDescriptionPage> createState() => _ProductDescriptionPageState();
@@ -27,7 +27,6 @@ class _ProductDescriptionPageState extends State<ProductDescriptionPage> {
             builder: (context, snapshot) {
               bool isProductAdded = userController
                   .isProductAddedToWishlist(product.docId.toString());
-              print('here in fututre builder');
               return Scaffold(
                 backgroundColor: whiteColor,
                 appBar: AppBar(

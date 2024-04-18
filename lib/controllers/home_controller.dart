@@ -15,6 +15,10 @@ class HomeController extends GetxController {
   List<Product> flashSaleProducts = [];
   List<Product> retrievedFlashSaleProducts = [];
 
+  // ignore: non_constant_identifier_names
+  List<Product> TopSellerProducts = [];
+  List<Product> retrievedTopSellerProducts = [];
+
   List<Product> productsForWomen = [];
   List<Product> retrievedProductsForWomen = [];
 
@@ -44,6 +48,13 @@ class HomeController extends GetxController {
             product.numOfferPercent! >= 40;
       }).toList();
       flashSaleProducts.assignAll(retrievedFlashSaleProducts);
+
+      //Top Seller products
+      retrievedTopSellerProducts = retrievedProducts.where((product) {
+        return (product.order != null);
+      }).toList();
+      retrievedTopSellerProducts.sort((a, b) => b.order!.compareTo(a.order!));
+      TopSellerProducts.assignAll(retrievedTopSellerProducts);
 
       // Products for women
       QuerySnapshot productForWomenSnapshot =
@@ -94,7 +105,7 @@ class HomeController extends GetxController {
     update();
   }
 
-  sortFilterByGender(String sortOption, List<String> selectedGender) {
+  sortFilterByGenderFlashSale(String sortOption, List<String> selectedGender) {
     flashSaleProducts.assignAll(retrievedFlashSaleProducts);
 
     if (sortOption == 'price_asc') {
@@ -112,6 +123,29 @@ class HomeController extends GetxController {
           .where((product) => selectedGender.contains(product.gender))
           .toList();
       flashSaleProducts.assignAll(filterByGender);
+    }
+
+    update();
+  }
+
+  sortFilterByGenderTopSeller(String sortOption, List<String> selectedGender) {
+    TopSellerProducts.assignAll(retrievedTopSellerProducts);
+
+    if (sortOption == 'price_asc') {
+      TopSellerProducts.sort((a, b) => (a.price ?? 0).compareTo(b.price ?? 0));
+    } else if (sortOption == 'price_desc') {
+      TopSellerProducts.sort((a, b) => (b.price ?? 0).compareTo(a.price ?? 0));
+    } else if (sortOption == 'rating_desc') {
+      TopSellerProducts.sort(
+          (a, b) => (b.review ?? 0).compareTo(a.review ?? 0));
+    }
+
+    if (selectedGender.isNotEmpty) {
+      // Filter products based on selected brands
+      List<Product> filterByGender = retrievedTopSellerProducts
+          .where((product) => selectedGender.contains(product.gender))
+          .toList();
+      TopSellerProducts.assignAll(filterByGender);
     }
 
     update();

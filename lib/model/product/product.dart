@@ -43,6 +43,9 @@ class Product {
   @JsonKey(name: "docId")
   String? docId;
 
+  @JsonKey(name: "order")
+  double? order;
+
   Product({
     this.id,
     this.name,
@@ -57,6 +60,7 @@ class Product {
     this.review,
     this.numOfferPercent,
     this.docId,
+    this.order,
   });
 
   factory Product.fromJson(Map<String, dynamic> json, String docID) =>

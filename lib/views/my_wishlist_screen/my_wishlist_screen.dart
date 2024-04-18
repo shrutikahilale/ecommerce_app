@@ -1,7 +1,5 @@
 import 'package:ecommerce_app/widgets_common/product_description_page.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_state_manager/src/simple/get_state.dart';
 
 import '../../consts/consts.dart';
 import '../../controllers/user_controller.dart';
