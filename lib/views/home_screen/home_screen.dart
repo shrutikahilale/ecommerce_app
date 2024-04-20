@@ -2,11 +2,13 @@ import 'package:ecommerce_app/consts/consts.dart';
 import 'package:ecommerce_app/consts/lists.dart';
 import 'package:ecommerce_app/controllers/home_controller.dart';
 import 'package:ecommerce_app/views/category_screen/topSeller_screen.dart';
+import 'package:ecommerce_app/views/home_screen/search_page.dart';
 import 'package:ecommerce_app/widgets_common/home_buttons.dart';
 import 'package:ecommerce_app/widgets_common/dropdown.dart';
 import 'package:ecommerce_app/widgets_common/product_card.dart';
 import 'package:ecommerce_app/widgets_common/product_description_page.dart';
 import 'package:ecommerce_app/views/category_screen/flashSale_screen.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart' as MS;
 import 'package:multi_dropdown/multiselect_dropdown.dart';
@@ -29,18 +31,17 @@ class HomeScreen extends StatelessWidget {
           child: SafeArea(
               child: Column(
             children: [
-              Container(
-                alignment: Alignment.center,
-                height: 60,
-                color: lightGrey,
-                child: TextFormField(
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    suffixIcon: Icon(Icons.search),
-                    filled: true,
-                    fillColor: whiteColor,
-                    hintText: searchanything,
-                    hintStyle: TextStyle(color: textfieldGrey),
+              GestureDetector(
+                onTap: () {
+                  Get.to(() => SearchPage());
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 60,
+                  color: whiteColor,
+                  child: const Text(
+                    searchanything,
+                    style: TextStyle(color: textfieldGrey),
                   ),
                 ),
               ),
