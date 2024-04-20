@@ -15,8 +15,8 @@ class SearchPage extends StatelessWidget {
     return GetBuilder<HomeController>(builder: (ctrl) {
       List<Product> filteredProducts = ctrl.products.where((product) {
         String productName = product.name.toString().toLowerCase();
-        String query = _searchController.text.toLowerCase();
-        return productName.contains(query);
+        List<String> query = _searchController.text.toLowerCase().split(' ');
+        return query.every((term) => productName.contains(term));
       }).toList();
 
       return Scaffold(
@@ -50,7 +50,6 @@ class SearchPage extends StatelessWidget {
               ),
               Expanded(
                 child: GridView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: filteredProducts.length,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
