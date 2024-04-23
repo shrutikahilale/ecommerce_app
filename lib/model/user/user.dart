@@ -18,7 +18,7 @@ class EcomUser {
 
   factory EcomUser.fromJson(Map<String, dynamic> json) => EcomUser(
     email: json["email"],
-    name: json["mail"]
+    name: json["mail"],
   );
 
   Map<String, dynamic> toJson() => {
