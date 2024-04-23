@@ -8,7 +8,6 @@ import 'package:ecommerce_app/widgets_common/dropdown.dart';
 import 'package:ecommerce_app/widgets_common/product_card.dart';
 import 'package:ecommerce_app/widgets_common/product_description_page.dart';
 import 'package:ecommerce_app/views/category_screen/flashSale_screen.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart' as MS;
 import 'package:multi_dropdown/multiselect_dropdown.dart';

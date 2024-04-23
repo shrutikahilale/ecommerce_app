@@ -1,5 +1,4 @@
 import 'package:ecommerce_app/consts/consts.dart';
-import 'package:ecommerce_app/controllers/home_controller.dart';
 import 'package:ecommerce_app/views/auth_screen/login_screen.dart';
 import 'package:ecommerce_app/views/auth_screen/signup_screen.dart';
 import 'package:ecommerce_app/views/home_screen/home.dart';
@@ -23,7 +22,6 @@ void main() async {
         appId: "1:773813254439:web:4ef10340bffe471dc4d102",
         measurementId: "G-E1B0HEXLL4"),
   );
-  Get.put(HomeController());
   runApp(const MyApp());
 }
 

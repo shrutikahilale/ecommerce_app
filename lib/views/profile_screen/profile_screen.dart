@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/consts/consts.dart';
+import 'package:ecommerce_app/controllers/home_controller.dart';
 import 'package:ecommerce_app/controllers/user_controller.dart';
 import 'package:ecommerce_app/model/user/user.dart';
 import 'package:ecommerce_app/widgets_common/bg_widget.dart';
@@ -8,14 +9,16 @@ import 'package:get/get.dart';
 import '../../consts/lists.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+  final UserController userController = Get.find<UserController>();
+
+  ProfileScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return bgWidget(
       child: Scaffold(
         body: SafeArea(
           child: FutureBuilder<EcomUser?>(
-            future: Get.put(UserController()).user,
+            future: userController.user,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
@@ -76,7 +79,9 @@ class ProfileScreen extends StatelessWidget {
                                   )),
                                   onPressed: () {
                                     FirebaseAuth.instance.signOut();
-                                    Get.offAndToNamed('/login_screen');
+                                    Get.delete<HomeController>();
+                                    Get.delete<UserController>();
+                                    Get.offAllNamed('/');
                                   },
                                   child: logout.text
                                       .fontFamily(semibold)

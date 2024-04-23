@@ -1,5 +1,6 @@
 import 'package:ecommerce_app/consts/consts.dart';
 import 'package:ecommerce_app/controllers/home_controller.dart';
+import 'package:ecommerce_app/controllers/user_controller.dart';
 import 'package:ecommerce_app/views/category_screen/category_screen.dart';
 import 'package:ecommerce_app/views/home_screen/home_screen.dart';
 import 'package:ecommerce_app/views/profile_screen/profile_screen.dart';
@@ -12,6 +13,7 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     //init home controller
     var controller = Get.put(HomeController());
+    Get.put(UserController());
 
     var navbarItem = [
       BottomNavigationBarItem(
@@ -28,7 +30,7 @@ class Home extends StatelessWidget {
       HomeScreen(),
       const CategoryScreen(),
       // const CartScreen(),
-      const ProfileScreen()
+       ProfileScreen()
     ];
 
     return Scaffold(
