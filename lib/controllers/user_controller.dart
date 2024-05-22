@@ -174,4 +174,13 @@ class UserController extends GetxController {
             .indexWhere((product) => product.docId == productId) !=
         -1;
   }
+
+  updateSearchHistory(List<String> keywords) async {
+    print('keywords $keywords');
+    for (String keyword in keywords) {
+      await currentUser.update({
+        "search_history": FieldValue.arrayUnion([keyword])
+      });
+    }
+  }
 }

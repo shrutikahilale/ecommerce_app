@@ -130,6 +130,8 @@ class _SignupScreenState extends State<SignupScreen> {
         'email': _email.trim(),
         'name': _name.trim(),
         'orders': [],
+        'wishlist': [],
+        'search_history': [],
       };
       await users.doc(_email.trim()).set(userFields);
       ScaffoldMessenger.of(context).showSnackBar(

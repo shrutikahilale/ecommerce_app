@@ -1,13 +1,16 @@
-import 'package:ecommerce_app/model/product/product.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:ecommerce_app/controllers/home_controller.dart';
+import 'package:ecommerce_app/controllers/user_controller.dart';
+import 'package:ecommerce_app/model/product/product.dart';
 import 'package:ecommerce_app/widgets_common/product_card.dart';
 import 'package:ecommerce_app/widgets_common/product_description_page.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
 import '../../widgets_common/bg_widget.dart';
 
 class SearchPage extends StatelessWidget {
   final TextEditingController _searchController = TextEditingController();
+  final _userController = Get.find<UserController>();
 
   SearchPage({super.key});
 
@@ -21,12 +24,14 @@ class SearchPage extends StatelessWidget {
           String productName = product.name.toString().toLowerCase();
           List<String> tokens = productName.split(' ');
           List<String> query = _searchController.text.toLowerCase().split(' ');
+          List<String> keywords = [];
 
           // Check if every term in the query is present in the productName
           for (String term in query) {
             bool found = false;
             for (String token in tokens) {
               if (term == token) {
+                keywords.add(token);
                 found = true;
                 break;
               }
@@ -38,6 +43,7 @@ class SearchPage extends StatelessWidget {
           }
 
           // If all terms are found, return true
+          _userController.updateSearchHistory(keywords);
           return true;
         }).toList();
 

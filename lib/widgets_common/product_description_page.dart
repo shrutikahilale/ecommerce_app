@@ -1,6 +1,9 @@
 import 'package:ecommerce_app/consts/consts.dart';
+import 'package:ecommerce_app/controllers/home_controller.dart';
 import 'package:ecommerce_app/controllers/user_controller.dart';
 import 'package:ecommerce_app/model/order/order.dart';
+import 'package:ecommerce_app/widgets_common/product_card.dart';
+import 'package:ecommerce_app/widgets_common/progress_indicator.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 
@@ -18,7 +21,11 @@ class _ProductDescriptionPageState extends State<ProductDescriptionPage> {
   Widget build(BuildContext context) {
     Product product = Get.arguments['data'];
     double rating = product.review ?? 0.0;
+    double discountPrice = double.parse(
+        (product.price! - product.numOfferPercent! * product.price! / 100)
+            .toStringAsFixed(0));
     TextEditingController controller = TextEditingController();
+    final homeController = Get.find<HomeController>();
 
     return GetBuilder<UserController>(
       builder: (userController) {
@@ -123,7 +130,9 @@ class _ProductDescriptionPageState extends State<ProductDescriptionPage> {
                               ),
                               const SizedBox(height: 20),
                               Text(
-                                'Rs. ${product.price}',
+                                product.offer == true
+                                    ? 'Discounted Price : Rs. $discountPrice'
+                                    : 'Rs. ${product.price}',
                                 style: const TextStyle(
                                   fontSize: 20,
                                   color: Colors.green,
@@ -144,51 +153,108 @@ class _ProductDescriptionPageState extends State<ProductDescriptionPage> {
 
                               20.heightBox,
                               //products may like section
-                              productsyoumaylike.text
-                                  .fontFamily(bold)
-                                  .size(16)
-                                  .color(darkFontGrey)
-                                  .make(),
-                              10.heightBox,
-                              // section copied from home screen featured products
-                              SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  children: List.generate(
-                                      6,
-                                      (index) => Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Image.asset(imgP1,
-                                                  width: 150,
-                                                  fit: BoxFit.cover),
-                                              10.heightBox,
-                                              "Laptop 4GB/64GB"
-                                                  .text
-                                                  .fontFamily(semibold)
-                                                  .color(darkFontGrey)
-                                                  .make(),
-                                              10.heightBox,
-                                              "Rs. 50000"
-                                                  .text
-                                                  .color(redColor)
-                                                  .fontFamily(bold)
-                                                  .size(16)
-                                                  .make()
-                                            ],
-                                          )
-                                              .box
-                                              .white
-                                              .margin(
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 4))
-                                              .roundedSM
-                                              .padding(const EdgeInsets.all(8))
-                                              .make()),
-                                ),
-                              ),
-
+                              FutureBuilder(
+                                  future:
+                                      homeController.fetchRecommendedProducts(
+                                    product.name!.split(' '),
+                                    product.id.toString(),
+                                  ),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return CustomProgressIndicator();
+                                    } else if (homeController
+                                        .recommendedProducts.isEmpty) {
+                                      return const SizedBox();
+                                    } else if (homeController
+                                        .recommendedProducts.isNotEmpty) {
+                                      return Container(
+                                        padding: const EdgeInsets.all(12),
+                                        width: double.infinity,
+                                        decoration: const BoxDecoration(
+                                            color: redColor),
+                                        child: Column(
+                                          children: [
+                                            productsyoumaylike.text
+                                                .fontFamily(bold)
+                                                .size(16)
+                                                .color(Colors.white)
+                                                .make(),
+                                            10.heightBox,
+                                            SizedBox(
+                                              height: 300,
+                                              child: ListView.builder(
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                itemCount: homeController
+                                                    .recommendedProducts.length,
+                                                itemBuilder: (context, index) {
+                                                  return SizedBox(
+                                                    width: 200,
+                                                    child: ProductCard(
+                                                      name: homeController
+                                                              .recommendedProducts[
+                                                                  index]
+                                                              .name ??
+                                                          'no name',
+                                                      imageUrl: homeController
+                                                              .recommendedProducts[
+                                                                  index]
+                                                              .image ??
+                                                          'url',
+                                                      price: homeController
+                                                              .recommendedProducts[
+                                                                  index]
+                                                              .price ??
+                                                          0.00,
+                                                      offerTag: (homeController
+                                                                  .recommendedProducts[
+                                                                      index]
+                                                                  .offer ??
+                                                              true)
+                                                          ? homeController
+                                                                  .recommendedProducts[
+                                                                      index]
+                                                                  .offerPercent ??
+                                                              ' '
+                                                          : ' ',
+                                                      review: homeController
+                                                              .recommendedProducts[
+                                                                  index]
+                                                              .review ??
+                                                          0.0,
+                                                      numOfferPercent: homeController
+                                                              .recommendedProducts[
+                                                                  index]
+                                                              .numOfferPercent ??
+                                                          0.0,
+                                                      onTap: () {
+                                                        Get.to(
+                                                            () =>
+                                                                const ProductDescriptionPage(),
+                                                            arguments: {
+                                                              'data': homeController
+                                                                      .recommendedProducts[
+                                                                  index]
+                                                            });
+                                                      },
+                                                      hasOffer: homeController
+                                                              .recommendedProducts[
+                                                                  index]
+                                                              .offer ??
+                                                          false,
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    } else {
+                                      return const SizedBox();
+                                    }
+                                  }),
                               const SizedBox(height: 20),
                               SizedBox(
                                 width: double.infinity,
@@ -205,7 +271,7 @@ class _ProductDescriptionPageState extends State<ProductDescriptionPage> {
                                   ),
                                   onPressed: () {
                                     if (controller.text.isNotEmpty) {
-                                      // Add order to the user's order list                                      
+                                      // Add order to the user's order list
                                       userController.addOrder(
                                         OrderModal(
                                           productName: product.name.toString(),

@@ -25,7 +25,7 @@ class TopSellerScreen extends StatelessWidget {
       return bgWidget(
         child: Scaffold(
           appBar: AppBar(
-            title: flashsale.text.fontFamily(bold).white.make(),
+            title: topSellers.text.fontFamily(bold).white.make(),
           ),
           body: SingleChildScrollView(
             child: Padding(
