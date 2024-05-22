@@ -38,7 +38,10 @@ dependencies:
   flutter_rating_bar: ^4.0.0
   json_annotation: ^4.8.1
   material: ^1.0.0+2
+  loading_animation_widget: ^1.2.1
+  http: ^1.2.1
   multi_dropdown: ^2.1.4
+  scrollview_observer: ^1.19.1
 
 dev_dependencies:
   flutter_test:

@@ -2,9 +2,10 @@ import 'package:ecommerce_app/consts/consts.dart';
 import 'package:ecommerce_app/controllers/home_controller.dart';
 import 'package:ecommerce_app/controllers/user_controller.dart';
 import 'package:ecommerce_app/views/category_screen/category_screen.dart';
-import 'package:ecommerce_app/views/home_screen/home_screen.dart';
 import 'package:ecommerce_app/views/profile_screen/profile_screen.dart';
 import 'package:get/get.dart';
+
+import 'home_screen.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -30,7 +31,7 @@ class Home extends StatelessWidget {
       HomeScreen(),
       const CategoryScreen(),
       // const CartScreen(),
-       ProfileScreen()
+      ProfileScreen()
     ];
 
     return Scaffold(

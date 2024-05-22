@@ -1,13 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce_app/consts/consts.dart';
 import 'package:ecommerce_app/model/product/product.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+
+import '../backend/api.dart';
 
 class HomeController extends GetxController {
   var currentNavIndex = 0.obs;
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  late CollectionReference productCollection;
+
+  // late CollectionReference productCollection;
+  late Query<Map<String, dynamic>> productCollection;
 
   List<Product> products = [];
   List<Product> retrievedProducts = []; // Store retrieved products
@@ -25,9 +30,13 @@ class HomeController extends GetxController {
   List<Product> productsForMen = [];
   List<Product> retrievedProductsForMen = [];
 
+  List<Product> featuredProducts = [];
+  List<Product> recommendedProducts = [];
+  int limit = 50;
+
   @override
   Future<void> onInit() async {
-    productCollection = firestore.collection('products');
+    productCollection = firestore.collection('products').limit(limit);
     await fetchProducts();
     super.onInit();
   }
@@ -45,7 +54,7 @@ class HomeController extends GetxController {
       // Flash Sale products
       retrievedFlashSaleProducts = retrievedProducts.where((product) {
         return product.numOfferPercent != null &&
-            product.numOfferPercent! >= 40;
+            product.numOfferPercent! >= 20;
       }).toList();
       flashSaleProducts.assignAll(retrievedFlashSaleProducts);
 
@@ -57,25 +66,21 @@ class HomeController extends GetxController {
       TopSellerProducts.assignAll(retrievedTopSellerProducts);
 
       // Products for women
-      QuerySnapshot productForWomenSnapshot =
-          await productCollection.where('gender', isEqualTo: 'Women').get();
-      retrievedProductsForWomen = productForWomenSnapshot.docs
-          .map((doc) =>
-              Product.fromJson(doc.data() as Map<String, dynamic>, doc.id))
+      retrievedProductsForWomen = retrievedProducts
+          .where((product) => product.gender == 'Women')
           .toList();
       productsForWomen.assignAll(retrievedProductsForWomen);
 
-      //Products for Men
-      QuerySnapshot productForMenSnapshot =
-          await productCollection.where('gender', isEqualTo: 'Men').get();
-      retrievedProductsForMen = productForMenSnapshot.docs
-          .map((doc) =>
-              Product.fromJson(doc.data() as Map<String, dynamic>, doc.id))
+      // Products for men
+      retrievedProductsForMen = retrievedProducts
+          .where((product) => product.gender == 'Men')
           .toList();
       productsForMen.assignAll(retrievedProductsForMen);
 
       Get.snackbar('Success', 'Products fetched Successfully',
           colorText: Colors.green);
+
+      print('products ${products.length}');
     } catch (e) {
       Get.snackbar('Error', e.toString(), colorText: Colors.red);
     } finally {
@@ -101,7 +106,6 @@ class HomeController extends GetxController {
           .toList();
       products.assignAll(filteredByBrands);
     }
-
     update();
   }
 
@@ -263,5 +267,52 @@ class HomeController extends GetxController {
       productsForMen.assignAll(filteredProducts);
     }
     update();
+  }
+
+  Future<List<Product>> fetchRecommendedProducts(
+      List<String> query, String productId) async {
+    try {
+      List<dynamic> productsIds = await getRecommendations(query);
+      List<String> productIdsStrings =
+          productsIds.map((id) => id.toString()).toList();
+
+      recommendedProducts = retrievedProducts.where((product) {
+        return productIdsStrings.contains(product.id.toString()) &&
+            productId != product.id.toString();
+      }).toList();
+    } catch (e) {
+      print('error: $e');
+    }
+    List<Product> res = [];
+    return res;
+  }
+
+  fetchFeaturedProducts() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      var snapshot = await firestore.collection('users').doc(user.email).get();
+
+      if (snapshot.exists) {
+        var data = snapshot.data() as Map<String, dynamic>;
+        List<dynamic> search_history = data['search_history'];
+
+        if (search_history.isEmpty) {
+          featuredProducts = [];
+        } else {
+          List<String> searchHistory =
+              search_history.map((keyword) => keyword.toString()).toList();
+
+          List productIds = await getFeaturedProducts(searchHistory);
+          List<String> productIdsStrings =
+              productIds.map((id) => id.toString()).toList();
+
+          featuredProducts = retrievedProducts.where((product) {
+            return productIdsStrings.contains(product.id.toString());
+          }).toList();
+
+          print(featuredProducts.map((e) => e.name));
+        }
+      }
+    }
   }
 }
